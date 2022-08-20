@@ -39,5 +39,3 @@ clean:
 	rm -rf ./bin/os.bin
 	rm -rf $(FILES)
 	rm -rf ./build/kernelfull.o
-	rm -rf ./build/idt/idt.o
-	rm -rf ./build/memory/memory.o

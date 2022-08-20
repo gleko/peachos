@@ -72,10 +72,8 @@ void print(const char* str)
 void kernel_main()
 {
     terminal_initialize();
-    print("Arvizturo tukorfurogep\nJassz");
+    print("Arvizturo tukorfurogep\nUdvozlehelletem!");
 
     // Initialize the interrupt descriptor table
     idt_init();
-
-    outb(0x60, 0xff);
 }
