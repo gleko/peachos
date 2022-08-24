@@ -5,6 +5,7 @@
 #include "memory/paging/paging.h"
 #include <stdint.h>
 #include <stddef.h>
+#include "disk/disk.h"
 
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
@@ -63,11 +64,11 @@ size_t strlen(const char* str)
 void print(const char* str)
 {
     size_t len = strlen(str);
-    char color = 1;
+    char color = 15;
     for (int i = 0; i < len; i++)
     {
         terminal_write_char(str[i], color);
-        if (++color > 15) { color = 1; }
+        // if (++color > 15) { color = 1; }
     }
 }
 
@@ -86,6 +87,14 @@ void kernel_main()
 
     // Setup paging
     kernel_chunk = paging_new_4gb(PAGING_IS_WRITABLE | PAGING_IS_PRESENT | PAGING_ACCESS_FROM_ALL);
+
+    // Switch to kernel paging chunk
+    paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
+
+    enable_paging();
+
+    char buf[512];
+    disk_read_sector(0, 1, buf);
 
     // Enable system interrupts
     enable_interrupts();
